@@ -1,0 +1,9 @@
+SELECT buku.id, buku.cover, buku.halaman, buku.judul, buku.bulan, buku.tahun, penerbit.nama, pengarang.nama, kategori.nama
+
+FROM buku
+
+JOIN penerbit ON buku.id_penerbit = penerbit.id
+JOIN pengarang ON buku.id_pengarang = pengarang.id
+JOIN kategori ON buku.id_kategori = kategori.id
+
+WHERE (buku.judul  LIKE "%%" ESCAPE "!" OR  pengarang.nama  LIKE "%%" ESCAPE "!" OR  penerbit.nama  LIKE "%%" ESCAPE "!" OR  buku.bulan  LIKE "%%" ESCAPE "!" OR  buku.tahun  LIKE "%%" ESCAPE "!" OR  kategori.nama  LIKE "%%" ESCAPE "!")
