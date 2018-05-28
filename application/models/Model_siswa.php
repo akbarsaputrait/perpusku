@@ -21,7 +21,7 @@ class Model_siswa extends CI_Model
         $this->db->select('siswa.id, siswa.nis, siswa.nama, siswa.jkel, siswa.kelas, jurusan.nama AS jurusan');
         $this->db->from($this->table);
         $this->db->join($this->join, 'jurusan ON siswa.id_jurusan = jurusan.id');
-
+        $this->db->order_by('siswa.id', 'desc');
         $i = 0;
 
         foreach ($this->column_search as $item) // loop column

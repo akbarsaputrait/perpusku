@@ -237,7 +237,7 @@
 							<img id="img_preview" width="100" style="border-radius: 50px;">
 						</div>
 						<div class="form-group col-md-12 d-flex justify-content-center al-itm-cnt">
-							<input name="photo_profile" type="file" id="photo_profile" required/>
+							<input name="photo_profile" type="file" id="photo_profile"/>
 						</div>
 					</div>
 					<div class="form-row">
@@ -506,7 +506,6 @@
 				type: 'GET',
 				url: base_url + 'home/get_buku/' + id_buku,
 				success: function (data) {
-					$(".loader.loader-default.is-active").fadeOut(250);
 					$.each(data.data, function (index, value) {
 						$('[name="pinjam_judul"]').val(value.judul_buku);
 						$('[name="pinjam_kode"]').val(value.nomor_buku);
@@ -558,15 +557,20 @@
 									'Selamat membaca!',
 									'Terima kasih.',
 									'success'
-								)
+								);
+								$('#pinjamModal').modal('hide');
 							}
 						})
 					} else if (data.status === 400) {
-						swal(
-							"Buku gagal dipinjam, silahkan coba lagi!", {
-								type: "warning",
-								buttons: false,
-								timer: 2500,
+						$('#pinjamModal').modal('hide');
+						$.notify({
+								message: data.error
+							}, {
+								type: 'danger',
+								animate: {
+									enter: 'animated fadeInDown',
+									exit: 'animated fadeOutUp'
+								},
 							});
 					}
 				}
@@ -593,8 +597,6 @@
 			var button = $(event.relatedTarget),
 				$modal = $(this),
 				id = button.data('id');
-
-			console.log(id);
 
 			$(".loader.loader-default.is-active").fadeIn(5);
 
@@ -642,9 +644,6 @@
 					data: {
 						item_search: item_search
 					},
-					// beforeSend: function () {
-					// 	$(".spinner").fadeIn(1);
-					// },
 					success: function (data) {
 						if (data.status === 200) {
 							$("#list_buku").empty();

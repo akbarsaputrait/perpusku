@@ -351,7 +351,7 @@ class Siswa extends CI_Controller
                 $this->db->insert('siswa', $data);
             }
             $response = array(
-                'status' => 200
+                'status' => 200,
             );
         }
 

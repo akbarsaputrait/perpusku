@@ -30,6 +30,7 @@ class Model_home extends CI_Model
 
     public function get_buku()
     {
+
         $this->db->select('buku.*, pengarang.nama AS pengarang, penerbit.nama AS penerbit, lokasi.nama AS lokasi');
         $this->db->from($this->buku);
         $this->db->join($this->pengarang, 'buku.id_pengarang = pengarang.id');

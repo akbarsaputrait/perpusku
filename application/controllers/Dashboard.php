@@ -21,6 +21,34 @@ class Dashboard extends CI_Controller
         $this->load->view('footer');
     }
 
+    public function get_all_peminjam()
+    {
+        header('Content-Type: application/json');
+
+        $query = $this->model_dashboard->get_datatables();
+
+        $data = array();
+        $response = array();
+
+        foreach ($query as $key => $value) {
+            $data[] = array(
+                'nama' => $value->nama,
+                'kelas' => $value->kelas,
+                'jurusan' => $value->jurusan,
+                'judul' => $value->judul,
+                'tgl' => $this->dateformat->tgl($value->tgl, true),
+            );
+        }
+
+        $response = array(
+            "data" => $data,
+            "draw" => intval($this->input->post('draw')),
+            "recordsTotal" => $this->model_dashboard->count_all(),
+            "recordsFiltered" => $this->model_dashboard->count_filtered(),
+        );
+        echo json_encode($response);
+    }
+
     public function count_siswa()
     {
         $data = $this->model_dashboard->count_siswa();
@@ -101,6 +129,7 @@ class Dashboard extends CI_Controller
         $response = array(
             'status' => 200,
             'data' => $data,
+            'query' => $this->db->last_query(),
         );
 
         echo json_encode($response);

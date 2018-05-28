@@ -24,17 +24,17 @@
                 <li class="nav-item">
                     <a class="nav-link" href="<?php echo base_url() ?>statistik">Statistik</a>
                 </li>
-				<li class="nav-item dropdown">
-					<a class="nav-link dropdown-toggle" href="#" id="bukuDropdown" role="button" data-toggle="dropdown" aria-haspopup="true"
-					aria-expanded="false">
-						Buku
-					</a>
-					<div class="dropdown-menu dropdown-menu-right" aria-labelledby="bukuDropdown">
-						<a class="dropdown-item" href="<?php echo base_url() ?>buku/daftar">Daftar Buku</a>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="bukuDropdown" role="button" data-toggle="dropdown" aria-haspopup="true"
+                        aria-expanded="false">
+                        Buku
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="bukuDropdown">
+                        <a class="dropdown-item" href="<?php echo base_url() ?>buku/daftar">Daftar Buku</a>
                         <a class="dropdown-item" href="<?php echo base_url() ?>buku/konfirmasi">Konfirmasi Buku</a>
                         <a class="dropdown-item" href="<?php echo base_url() ?>buku/pengembalian">Pengembalian Buku</a>
-					</div>
-				</li>
+                    </div>
+                </li>
             </ul>
             <div class="dp-inline my-2 my-lg-0">
                 <ul class="navbar-nav mr-auto">
@@ -80,46 +80,50 @@
 <script src="<?php echo base_url() ?>assets/js/Chart.bundle.js"></script>
 <script>
     var speedCanvas = document.getElementById("speedChart");
+    var base_url = '<?php echo base_url() ?>';
 
-    var dataFirst = {
-        label: "Perempuan",
-        data: [0, 59, 75, 20, 20, 55, 40],
-        lineTension: 0.3,
-        borderColor: 'rgba(255,99,132,1)',
-        backgroundColor: 'rgba(255, 99, 132, 0.2)'
-        // Set More Options
-    };
+    function laki() {
+        $.ajax({
+            type: 'GET',
+            url: base_url + 'statistik/laki',
+            success: function (data) {
+                var jkel = [];
+                var jumlah = [];
 
-    var dataSecond = {
-        label: "Laki-laki",
-        data: [20, 15, 60, 60, 65, 30, 70],
-        borderColor: 'rgba(75, 192, 192, 1)',
-        backgroundColor: 'rgba(75, 192, 192, 0.2)'
-        // Set More Options
-    };
+                for (var i in data) {
+                    jkel.push(data[i].jkel);
+                    jumlah.push(parseFloat(data[i].jumlah));
+                }
 
-    var speedData = {
-        labels: ["0s", "10s", "20s", "30s", "40s", "50s", "60s"],
-        datasets: [dataFirst, dataSecond],
-    };
-
-    var chartOptions = {
-        legend: {
-            display: true,
-            position: 'top',
-            labels: {
-                boxWidth: 80,
-                fontColor: 'black'
+                var stats_app = new Chart("speedChart", {
+				type: 'pie',
+				data: {
+					labels: jkel,
+					datasets: [{
+						label: 'Aplikasi',
+						data: jumlah,
+						backgroundColor: [
+							'rgba(255, 99, 132, 0.2)',
+							'rgba(54, 162, 235, 0.2)',
+							'rgba(255, 206, 86, 0.2)',
+							'rgba(75, 192, 192, 0.2)',
+							'rgba(153, 102, 255, 0.2)'
+						],
+						borderColor: [
+							'rgba(255,99,132,1)',
+							'rgba(54, 162, 235, 1)',
+							'rgba(255, 206, 86, 1)',
+							'rgba(75, 192, 192, 1)',
+							'rgba(153, 102, 255, 1)'
+						]
+					}]
+				}
+			});
             }
-        },
-        responsive: true
-    };
+        });
+    }
 
-    var lineChart = new Chart(speedCanvas, {
-        type: 'line',
-        data: speedData,
-        options: chartOptions
-    });
+    laki();
 </script>
 
 </html>

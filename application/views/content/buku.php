@@ -252,10 +252,14 @@
 									</ul>
 								</li>
 								<li>
+									Apabila ada data yang kosong, isikan dengan " - " (tanpa tanda petik).
+								</li>
+								<li>
 									Urutan baris tabel harus sesuai dengan data yang diperlukan.
 								</li>
 								<li>
-									Apabila ada data yang kosong, isikan dengan " - " (tanpa tanda petik).
+									Anda dapat mengunduh format nya disini : <br/>
+									<a href="<?php echo base_url()?>assets/excel/Buku.xlsx" download>Unduh</a>
 								</li>
 							</ol>
 						</div>

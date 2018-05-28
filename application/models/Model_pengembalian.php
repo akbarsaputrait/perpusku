@@ -15,7 +15,7 @@ class Model_pengembalian extends CI_Model
 
     private function _get_datatables_query()
     {
-        $this->db->select('data_peminjam.id, data_peminjam.kode AS kode_pinjaman, siswa.nama, buku.judul, data_peminjam.tgl_pinjam, data_peminjam.tgl_kembali');
+        $this->db->select('data_peminjam.id, data_peminjam.kode AS kode_pinjaman, siswa.nama, buku.judul, DATE(data_peminjam.tgl_pinjam) AS tgl_pinjam, DATE(data_peminjam.tgl_kembali) AS tgl_kembali');
         $this->db->from('data_peminjam');
         $this->db->join('siswa', 'data_peminjam.id_siswa = siswa.id');
         $this->db->join('jurusan', 'siswa.id_jurusan = jurusan.id');
@@ -84,7 +84,7 @@ class Model_pengembalian extends CI_Model
 
     public function get_data_peminjam($id)
     {
-        $this->db->select('data_peminjam.id, data_kembali.id AS id_pengembalian, DATEDIFF(DATE(NOW()), data_peminjam.tgl_kembali) AS telat, jurusan.nama AS jurusan, data_peminjam.kode AS kode_pinjaman, siswa.id AS id_siswa, siswa.nama, siswa.kelas, buku.judul, buku.id AS buku_id, data_peminjam.tgl_pinjam, data_peminjam.tgl_kembali');
+        $this->db->select('data_peminjam.id, data_kembali.id AS id_pengembalian, DATEDIFF(DATE(NOW()), DATE(data_peminjam.tgl_kembali)) AS telat, jurusan.nama AS jurusan, data_peminjam.kode AS kode_pinjaman, siswa.id AS id_siswa, siswa.nama, siswa.kelas, buku.judul, buku.id AS buku_id, DATE(data_peminjam.tgl_pinjam) AS tgl_pinjam, DATE(data_peminjam.tgl_kembali) AS tgl_kembali');
         $this->db->from('data_peminjam');
         $this->db->join('data_kembali', 'data_kembali.id_peminjam = data_peminjam.id');
         $this->db->join('siswa', 'data_peminjam.id_siswa = siswa.id');
@@ -96,7 +96,7 @@ class Model_pengembalian extends CI_Model
         return $query;
     }
 
-    public function check_buku($id)
+    public function check_id($id)
     {
         $this->db->select('data_kembali.id_peminjam, buku.sisa, buku.id AS id_buku');
         $this->db->from('data_kembali');

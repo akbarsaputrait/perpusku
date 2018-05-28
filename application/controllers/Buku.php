@@ -431,7 +431,7 @@ class Buku extends CI_Controller
         if ($check) {
 
             $this->db->trans_start();
-            $this->db->where('buku.id', $id);
+            $this->db->where('buku.id', $check->id);
             $this->db->update('buku', array('sisa' => ($check->sisa - 1) ));
             $this->db->trans_complete();
 
@@ -486,6 +486,28 @@ class Buku extends CI_Controller
         echo json_encode($response);
     }
 
+    public function tolak_peminjaman()
+    {
+        header('Content-Type: application/json');
+
+        $response = array();
+
+        $id = $this->input->post('id_tolak');
+
+        $delete = $this->db->delete('data_peminjam', array('data_peminjam.id' => $id));
+        if ($delete) {
+            $response = array(
+                'status' => 200,
+            );
+        } else {
+            $response = array(
+                'status' => 400,
+            );
+        }
+
+        echo json_encode($response);
+    }
+
     public function get_data_pengembalian($id)
     {
         header('Content-Type: application/json');
@@ -513,7 +535,6 @@ class Buku extends CI_Controller
         $response = array(
             'status' => 200,
             'data' => $data,
-            'query' => $this->db->last_query()
         );
 
         echo json_encode($response);
@@ -528,7 +549,7 @@ class Buku extends CI_Controller
 
         $id_pengembalian = $this->input->post('id_pengembalian');
 
-        $check = $this->model_pengembalian->check_buku($id_pengembalian);
+        $check = $this->model_pengembalian->check_id($id_pengembalian);
         if ($check) {
 
             $this->db->trans_start();

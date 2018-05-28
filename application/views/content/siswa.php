@@ -253,6 +253,10 @@
 								<li>
 									Urutan baris tabel harus sesuai dengan data yang diperlukan.
 								</li>
+								<li>
+									Anda dapat mengunduh format nya disini : <br/>
+									<a href="<?php echo base_url() ?>assets/excel/Siswa.xlsx" download>Unduh</a>
+								</li>
 							</ol>
 						</div>
 						<div class="col-md-6">

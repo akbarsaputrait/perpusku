@@ -9,7 +9,7 @@
 			</nav>
 		</a>
 		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
-		aria-expanded="false" aria-label="Toggle navigation">
+		    aria-expanded="false" aria-label="Toggle navigation">
 			<i class="fas fa-bars clr-wht"></i>
 		</button>
 
@@ -27,7 +27,7 @@
 				</li>
 				<li class="nav-item dropdown">
 					<a class="nav-link dropdown-toggle" href="#" id="bukuDropdown" role="button" data-toggle="dropdown" aria-haspopup="true"
-					aria-expanded="false">
+					    aria-expanded="false">
 						Buku
 					</a>
 					<div class="dropdown-menu dropdown-menu-right" aria-labelledby="bukuDropdown">
@@ -41,7 +41,7 @@
 				<ul class="navbar-nav mr-auto">
 					<li class="nav-item dropdown">
 						<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true"
-						aria-expanded="false">
+						    aria-expanded="false">
 							Admin
 						</a>
 						<div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
@@ -71,7 +71,7 @@
 				<div class="col-md-12">
 					<div class="table-responsive bg-white clr-blck p-4">
 						<table cellpadding="1" cellspacing="1" id="daftar_peminjam" class="display table table-bordered table-hover table-striped"
-						width="100%">
+						    width="100%">
 							<thead>
 								<tr>
 									<th>Kode Peminjaman</th>
@@ -161,10 +161,53 @@
 					'render': function (data, type, row) {
 						return '<button type="button" id="button_show" class="btn btn-success btn-block" data-id="' +
 							data +
-							'" data-toggle="modal" data-target="#konfirmasiBuku"><i class="fas fa-check"></i></button>';
+							'" data-toggle="modal" data-target="#konfirmasiBuku"><i class="fas fa-check"></i></button>' +
+							'<button type="button" id="button_tolak" class="btn btn-danger btn-block" data-id="' +
+							data +
+							'"><i class="fas fa-trash"></i></button>';
 					}
 				}
 			]
+		});
+
+		$(document).on('click', '#button_tolak', function () {
+			var id_tolak = $(this).data('id');
+			swal({
+					title: "Anda yakin untuk menolak peminjaman?",
+					icon: "warning",
+					buttons: ["Tidak", "Iya"],
+				})
+				.then((isConfirm) => {
+					if (!isConfirm) return;
+
+					$(".loader.loader-default.is-active").fadeIn(5);
+
+					$.ajax({
+						type: "POST",
+						url: base_url + "buku/tolak_peminjaman",
+						data: {
+							id_tolak: id_tolak
+						},
+						success: function (data) {
+							if (data.status === 200) {
+								swal(
+									"Berhasil!", {
+										icon: "success",
+										buttons: false,
+										timer: 1000,
+									});
+								peminjam.ajax.reload(null, false);
+							} else {
+								swal(
+									"Gagal! Silahkan coba lagi.", {
+										icon: "error",
+										buttons: false,
+										timer: 1000,
+									});
+							}
+						}
+					});
+				});
 		});
 
 		$(document).on('show.bs.modal', '#konfirmasiBuku', function (event) {
@@ -186,7 +229,8 @@
 								'<div class="row"><div class="col-md-12 text-center p-4"><h3><span class="badge badge-dark">' + value
 								.kode_pinjaman +
 								'</span></h3><h1>' + value.nama +
-								'</h1></h1><h6 class="text-muted">' + value.kelas + ' ' + value.jurusan + '</h6><h4 class="mb-5">"' + value.judul + '"</h4><div class="row"><div class="col-md-6"><h1>' +
+								'</h1></h1><h6 class="text-muted">' + value.kelas + ' ' + value.jurusan + '</h6><h4 class="mb-5">"' +
+								value.judul + '"</h4><div class="row"><div class="col-md-6"><h1>' +
 								value.tgl_pinjam +
 								'</h1><p class="text-small">TANGGAL PINJAM</p></p></div><div class="col-md-6"><h1>' + value.tgl_kembali +
 								'</h1><p class="text-small">TANGGAL KEMBALI</p></div></div></div></div><div class="row"><div class="col-md-6 d-flex justify-content-center form-group"><button type="button" id="button_confirm" data-id="' +
@@ -215,7 +259,7 @@
 				type: 'POST',
 				url: base_url + 'buku/konfirmasi_peminjaman/',
 				data: {
-					id_peminjam:id_peminjam
+					id_peminjam: id_peminjam
 				},
 				success: function (data) {
 					if (data.status === 200) {
@@ -250,7 +294,6 @@
 			$(".loader.loader-default.is-active").fadeOut(250);
 		});
 	});
-
 </script>
 
 </html>

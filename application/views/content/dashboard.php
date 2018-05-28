@@ -61,7 +61,7 @@
 					<button class="btn btn-grp" id="refresh">
 						<i class="fas fa-sync"></i> Refresh</button>
 				</div>
-				<div class="col-md-3">
+				<div class="col-md-6">
 					<div class="card p-4">
 						<div class="card-body d-flex justify-content-between align-items-center">
 							<div>
@@ -75,7 +75,7 @@
 						</div>
 					</div>
 				</div>
-				<div class="col-md-3">
+				<div class="col-md-6">
 					<div class="card p-4">
 						<div class="card-body d-flex justify-content-between align-items-center">
 							<div>
@@ -89,59 +89,15 @@
 						</div>
 					</div>
 				</div>
-				<div class="col-md-3">
-					<div class="card p-4">
-						<div class="card-body d-flex justify-content-between align-items-center">
-							<div>
-								<span class="h4 d-block font-weight-normal mb-2">10</span>
-								<span class="font-weight-light">Total Peminjam</span>
-							</div>
-
-							<div class="h2 text-muted">
-								<i class="fas fa-user"></i>
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="col-md-3">
-					<div class="card p-4">
-						<div class="card-body d-flex justify-content-between align-items-center">
-							<div>
-								<span class="h4 d-block font-weight-normal mb-2">10</span>
-								<span class="font-weight-light">Total Pengunjung</span>
-							</div>
-
-							<div class="h2 text-muted">
-								<i class="fas fa-user"></i>
-							</div>
-						</div>
-					</div>
-				</div>
 			</div>
 			<div class="row mt-4 mb-3">
-				<!-- <div class="col-md-8">
-					<div class="card">
-						<div class="card-header clr-blck">
-							Total Users
-						</div>
-
-						<div class="card-body p-0">
-							<div class="p-4">
-								<canvas id="myChart" width="965" height="193" class="chartjs-render-monitor" style="display: block; width: 965px; height: 193px;"></canvas>
-							</div>
-						</div>
-					</div>
-				</div> -->
 				<div class="col-md-6">
 					<div class="card">
 						<div class="card-header clr-blck">
 							Pemberitahuan Peminjaman Buku
 						</div>
 
-						<div class="card-body news">
-							<!-- <div class="alert alert-primary news">
-								<strong>Akbar Anung Yudha Saputra</strong> telah meminjam buku berjudul "Menguasai PHP MySQL" pada Jumat, 12 April 2018.</div> -->
-						</div>
+						<div class="card-body news"></div>
 					</div>
 				</div>
 				<div class="col-md-6">
@@ -149,11 +105,25 @@
 						<div class="card-header clr-blck">
 							Pemberitahuan Pengembalian Buku
 						</div>
-
-						<div class="card-body news1">
-							<!-- <div class="alert alert-primary news">
-								<strong>Akbar Anung Yudha Saputra</strong> telah meminjam buku berjudul "Menguasai PHP MySQL" pada Jumat, 12 April 2018.</div> -->
-						</div>
+						<div class="card-body news1"></div>
+					</div>
+				</div>
+			</div>
+			<div class="row mt-4 mb-3">
+				<div class="col-md-12">
+					<div class="table-responsive bg-white clr-blck p-4">
+						<table cellpadding="1" cellspacing="1" id="daftar_peminjam" class="display table table-bordered table-hover table-striped"
+						    width="100%">
+							<thead>
+								<tr>
+									<th>Nama</th>
+									<th>Kelas</th>
+									<th>Jurusan</th>
+									<th>Judul Buku</th>
+									<th>Tanggal</th>
+								</tr>
+							</thead>
+						</table>
 					</div>
 				</div>
 			</div>
@@ -170,6 +140,42 @@
 <script>
 	$(document).ready(function () {
 		var base_url = '<?php echo base_url() ?>';
+
+		// Load daftar buku
+		var buku = $('#daftar_peminjam').DataTable({
+			select: true,
+			lengthChange: true,
+			searching: true,
+			processing: true,
+			responsive: true,
+			serverSide: true,
+			ajax: {
+				url: base_url + "dashboard/get_all_peminjam/",
+				type: 'POST'
+			},
+			columns: [
+				{
+					'data' : 'nama',
+				},
+				{
+					'data' : 'kelas',
+				},
+				{
+					'data' : 'jurusan',
+				},
+				{
+					'data' : 'judul',
+				},
+				{
+					'data' : 'tgl',
+				},
+			],
+			columnDefs: [{
+				target: 0,
+				search: false
+			}]
+		});
+
 
 		// TOTAL SISWA
 		$.ajax({
